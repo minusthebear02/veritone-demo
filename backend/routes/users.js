@@ -27,7 +27,8 @@ router.post( '/login', userValidate, async function ( req, res, next ) {
   }
 } )
 
-router.post( '/create', userValidate, async function ( req, res, next ) {
+/* CREATE user */
+router.post( '/', userValidate, async function ( req, res, next ) {
   try {
     const errors = validationResult( req );
     if ( !errors.isEmpty() ) {

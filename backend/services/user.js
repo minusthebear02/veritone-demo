@@ -1,7 +1,7 @@
 const db = require( './db' );
 
 async function login ( email, password ) {
-    if (!email) throw { code: 400, message: 'No email provided...' }
+    if ( !email ) throw { code: 400, message: 'No email provided...' }
     if ( !password ) throw { code: 400, message: 'No password provided...' }
 
     const result = await db.query(
@@ -14,7 +14,21 @@ async function login ( email, password ) {
     return { user: result[0] }
 }
 
+async function createUser ( name, email, password ) {
+    if ( !email ) throw { code: 400, message: 'No email provided...' }
+    if ( !password ) throw { code: 400, message: 'No password provided...' }
+
+    const result = await db.query(
+        `INSERT INTO users (name, email, password) VALUES ($1, $2, $3)`,
+        [name, email, password],
+        (error, result) => { if (error) throw error }
+    )
+
+    return result;
+}
+
 
 module.exports = {
-    login
+    login,
+    createUser
 }

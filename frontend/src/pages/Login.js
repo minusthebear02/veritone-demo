@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import LoginForm from '../components/LoginForm';
+import SignUpForm from '../components/SignUpForm';
 
 const Login = () => {
     const [isSignup, setIsSignup] = useState( 0 );
@@ -17,16 +18,16 @@ const Login = () => {
     return (
         <Container>
             <Paper elevation={3} className="form-container">
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <Typography variant="h4" align="center">Welcome to your Shopping List</Typography>
                 <Tabs
                     value={isSignup}
                     onChange={handleTabChange}
                     aria-label="tab between sign up and log in"
                 >
-                    <Tab label="Log In"  />
-                    <Tab label="Sign Up" />
+                    <Tab className="tab" label="Log In"  />
+                    <Tab className="tab" label="Sign Up" />
                 </Tabs>
-                </Box>
+                {isSignup ? <SignUpForm /> : <LoginForm />}
             </Paper>
       </Container>
     );
@@ -42,7 +43,16 @@ const Container = styled.div`
 
     .form-container {
         width: 80%;
-        max-width: 400px;
+        max-width: 500px;
         padding: 25px;
+
+        h4 {
+            margin-bottom: 15px;
+        }
+    }
+
+    .tab {
+        flex: 1;
+        font-weight: 700
     }
 `

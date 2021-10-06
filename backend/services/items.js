@@ -26,13 +26,13 @@ async function createItem ( item, userId ) {
     const { name, description = '', purchased = false } = item;
     let result;
     const query = await db.query(
-        `INSERT INTO items (name, description, user_id, purchased) VALUES ($1, $2, $3, $4)`,
-        [name, description, userId, purchased],
-        ( error, results ) => {
-            if ( error ) throw error;
-            result = { code: 200, message: 'Success' }
-        }
-    )
+      `INSERT INTO items (name, description, user_id, purchased) VALUES ($1, $2, $3, $4) RETURNING *`,
+      [name, description, userId, purchased],
+      (error, results) => {
+        if (error) throw error;
+        result = { code: 200, message: 'Success' };
+      }
+    );
 
     console.log('result: ', result)
 
@@ -45,10 +45,12 @@ async function updateItem ( item ) {
     const { id, name, description = '', purchased = false } = item;
 
     await db.query(
-        `UPDATE items SET name = $1, description = $2, purchased = $3 WHERE id = $4`,
-        [name, description, purchased, id],
-        ( error, results ) => { if (error) throw error }
-    )
+      `UPDATE items SET name = $1, description = $2, purchased = $3 WHERE id = $4 RETURNING *`,
+      [name, description, purchased, id],
+      (error, results) => {
+        if (error) throw error;
+      }
+    );
 
     return {id}
 }

@@ -18,13 +18,13 @@ async function createUser ( name, email, password ) {
     if ( !email ) throw { code: 400, message: 'No email provided...' }
     if ( !password ) throw { code: 400, message: 'No password provided...' }
 
-    const result = await db.query(
-        `INSERT INTO users (name, email, password) VALUES ($1, $2, $3)`,
+    const user = await db.query(
+        `INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *;`,
         [name, email, password],
         (error, result) => { if (error) throw error }
     )
 
-    return result;
+    return {user: user[0]};
 }
 
 

@@ -39,7 +39,7 @@ const Header = () => {
             <>
               <Button
                 size="large"
-                aria-label="account of current user"
+                aria-label="options of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
                 onClick={handleMenu}

@@ -71,6 +71,7 @@ router.put( '/', itemValidate, async function ( req, res, next ) {
     }
 } )
 
+/* DELETE item */
 router.delete( '/', async function ( req, res, next ) {
     try {
         res.json( await items.deleteItem( req.body.id ))

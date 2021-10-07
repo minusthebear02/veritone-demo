@@ -4,7 +4,7 @@ This is a simple shopping list app used to group the items a user would want to 
 
 Let's get started!
 
-### To run the backend
+## To run the backend
 
 First, clone the entire repo, which includes the frontend and backend in separate directories.
 
@@ -14,7 +14,7 @@ Once completed, you'll need to set up your `.env` file with DB connection info. 
 
 After both of these steps are completed, run `npm run dev` from the `backend` directory to start the server.
 
-### To run the frontend
+## To run the frontend
 
 From the `frontend` directory, run `npm install` to install the necessary dependencies.
 

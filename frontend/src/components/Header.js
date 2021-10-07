@@ -81,14 +81,11 @@ const StyledAppBar = styled( AppBar )`
  align-items: center;
  flex-direction: row;
 
- h1 {
-     font-weight: 600;
-     line-height: 23px;
-     letter-spacing: 0.25px;
-     padding: 20px 0;
- }
-
- button {
-   font-family: 'Nunito';
- }
+  h1 {
+      font-family: 'Dosis';
+      font-weight: 600;
+      line-height: 23px;
+      letter-spacing: 0.25px;
+      padding: 20px 0;
+  }
 `

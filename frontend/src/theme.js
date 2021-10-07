@@ -2,7 +2,7 @@ import { createTheme } from "@mui/material/styles";
 
 export const theme = createTheme({
 	typography: {
-		fontFamily: 'Dosis, Nunito, sans-serif',
+		fontFamily: 'Nunito, Dosis, sans-serif',
 	},
 	palette: {
 		primary: {

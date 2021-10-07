@@ -27,12 +27,20 @@ const ShoppingListPage = () => {
     return (
         <>
             <Page>
-                {!shoppingListItems?.pages?.[0].data?.data?.length ? (
+                {shoppingListItems?.pages?.[0].data?.data?.length ? (
                     <Box className="empty-box">
                         <Typography variant="h4">Your shopping list is empty :(</Typography>
                         <Button variant="contained" color="secondary" onClick={handleOpenDialog}>Add your first item</Button>
                     </Box>
-                ) : <ShoppingList listItems={shoppingListItems.pages} />}
+                ) : (
+                    <div className="list-container">
+                        <div className="list-header">
+                            <Typography variant="h4">Your Items</Typography>
+                            <Button variant="contained" color="secondary" onClick={handleOpenDialog}>Add Item</Button>
+                        </div>
+                        <ShoppingList listItems={shoppingListItems.pages} />
+                    </div>
+                )}
             </Page>
             <ItemDialog open={dialogOpen} setOpen={setDialogOpen} item={itemBeingEdited} />
         </>
@@ -54,6 +62,18 @@ const Page = styled.div`
   justify-content: center;
   padding: 100px 5%;
 
+  h4 {
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 600;
+  }
+
+  button {
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: unset;
+  }
+
   .empty-box {
     width: 100%;
     max-width: 614px;
@@ -67,18 +87,20 @@ const Page = styled.div`
     text-align: center;
 
     h4 {
-        font-family: 'Nunito';
-        font-size: 18px;
-        color: #87898C;
-        position: absolute;
-        transform: translateY(-43px)
+      color: #87898c;
+      position: absolute;
+      transform: translateY(-43px);
     }
+  }
 
-    button {
-        font-family: 'Nunito';
-        font-weight: 600;
-        font-size: 14px;
-        text-transform: unset;
+  .list-container {
+    width: 100%;
+    padding: 25px 10%;
+
+    .list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
   }
 `;

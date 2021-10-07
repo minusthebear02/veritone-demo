@@ -14,6 +14,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import { useForm, Controller } from 'react-hook-form';
 import { useItems } from '../context/ItemContext';
 
@@ -110,11 +112,22 @@ const ItemDialog = ( { open, setOpen, item } ) => {
                     {[...new Array(10)].map((_, index) => (
                       <MenuItem value={index + 1}>{index + 1}</MenuItem>
                     ))}
-
                   </Select>
                 </FormControl>
               )}
             />
+            {item && (
+              <Controller
+                name="purchased"
+                control={control}
+                render={({ field }) => (
+                  <FormControlLabel
+                    control={<Checkbox defaultChecked={item?.purchased} {...field} />}
+                    label="Purchased"
+                  />
+                )}
+              />
+            )}
             <DialogActions className="actions">
               <Button onClick={handleClose}>Cancel</Button>
               <LoadingButton
@@ -158,7 +171,6 @@ const StyledDialog = styled(Dialog)`
 
     h4,
     h6 {
-      font-family: 'Nunito';
       font-size: 18px;
       color: #2a323c;
     }
@@ -175,7 +187,6 @@ const StyledDialog = styled(Dialog)`
   }
 
   button {
-    font-family: 'Nunito';
     font-weight: 600;
   }
 `;
@@ -185,13 +196,6 @@ const Form = styled.form`
   flex-direction: column;
   margin-top: 15px;
   row-gap: 18px;
-
-  label,
-  input,
-  textarea,
-  .MuiMenuItem-root {
-    /* font-family: 'Nunito'; */
-  }
 
   label {
     color: #9ca8b4;

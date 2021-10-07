@@ -16,43 +16,40 @@ async function getItemsByUser ( page = 1, userId ) {
         }
     )
     const data = util.emptyOrRows( rows );
+    const meta = { nextPage: data.length === config.itemsPerPage ? page + 1 : false}
 
-    return { data }
+    return { data, meta }
 }
 
 async function createItem ( item, userId ) {
     if ( !userId ) throw { code: 400, message: 'User ID not provided...' }
 
-    const { name, description = '', purchased = false } = item;
-    let result;
-    const query = await db.query(
-      `INSERT INTO items (name, description, user_id, purchased) VALUES ($1, $2, $3, $4) RETURNING *`,
-      [name, description, userId, purchased],
+    const { name, description = '', purchased = false, quantity = 1 } = item;
+    const result = await db.query(
+      `INSERT INTO items (name, description, user_id, purchased, quantity) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+      [name, description, userId, purchased, quantity],
       (error, results) => {
         if (error) throw error;
-        result = { code: 200, message: 'Success' };
       }
     );
 
-    console.log('result: ', result)
-
-    return result
+    return {item: result[0]}
 }
 
 async function updateItem ( item ) {
     if ( !item.id ) throw { code: 400, message: 'No item ID provided...' }
 
-    const { id, name, description = '', purchased = false } = item;
+    const { id, name, description = '', purchased = false, quantity = 1 } = item;
 
-    await db.query(
-      `UPDATE items SET name = $1, description = $2, purchased = $3 WHERE id = $4 RETURNING *`,
-      [name, description, purchased, id],
+    const result = await db.query(
+      `UPDATE items SET name = $1, description = $2, purchased = $3, quantity = $4 WHERE id = $5 RETURNING *`,
+      [name, description, purchased, quantity, id],
       (error, results) => {
         if (error) throw error;
       }
     );
 
-    return {id}
+    return {item: result[0]}
 }
 
 async function deleteItem ( itemId ) {

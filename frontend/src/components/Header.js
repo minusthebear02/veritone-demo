@@ -87,4 +87,8 @@ const StyledAppBar = styled( AppBar )`
      letter-spacing: 0.25px;
      padding: 20px 0;
  }
+
+ button {
+   font-family: 'Nunito';
+ }
 `

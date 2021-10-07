@@ -7,6 +7,7 @@ import { theme } from './theme';
 import Router from './Router';
 import { UserProvider } from './context/UserContext';
 import { ToastMessageProvider } from './context/ToastContext';
+import { ItemProvider } from './context/ItemContext';
 
 const queryClient = new QueryClient()
 
@@ -17,7 +18,9 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <ToastMessageProvider>
           <UserProvider>
-            <Router />
+            <ItemProvider>
+              <Router />
+            </ItemProvider>
           </UserProvider>
         </ToastMessageProvider>
       </QueryClientProvider>

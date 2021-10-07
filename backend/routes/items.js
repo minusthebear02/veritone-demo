@@ -5,10 +5,14 @@ const { check, validationResult } = require('express-validator');
 const items = require( '../services/items' );
 
 const itemValidate = [
-    check( 'name', 'Name is a required field' ).isLength( { min: 2 }).trim().escape(),
-    check( 'description' ).trim().escape(),
-    check( 'purchased' ).trim().escape()
-  ]
+  check('name', 'Name is a required field')
+    .isLength({ min: 2 })
+    .trim()
+    .escape(),
+  check('description').trim().escape(),
+  check('purchased').trim().escape(),
+  check('quantity').isNumeric().trim().escape(),
+];
 
 /* GET items. */
 router.get('/', async function(req, res, next) {
@@ -30,11 +34,12 @@ router.post( '/', itemValidate, async function ( req, res, next ) {
             return res.status( 422 ).json( { errors: errors.array() } );
         }
 
-        const { name, description = '', purchased = false, userId } = req.body;
+        const { name, description = '', purchased = false, quantity = 1, userId } = req.body;
         const item = {
             name,
             description,
-            purchased: purchased === '' ? false : purchased
+            purchased: purchased === '' ? false : purchased,
+            quantity
         }
 
         res.json( await items.createItem( item, userId ) );
@@ -54,12 +59,13 @@ router.put( '/', itemValidate, async function ( req, res, next ) {
             return res.status( 422 ).json( { errors: errors.array() } );
         }
 
-        const { id, name, description = '', purchased = false } = req.body;
+        const { id, name, description = '', purchased = false, quantity = 1 } = req.body;
         const item = {
             id,
             name,
             description,
-            purchased: purchased === '' ? false : purchased
+            purchased: purchased === '' ? false : purchased,
+            quantity
         }
 
         res.json( await items.updateItem( item ) );

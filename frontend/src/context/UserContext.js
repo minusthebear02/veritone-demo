@@ -15,8 +15,9 @@ export const useUser = () => useContext(UserContext);
 
 const useUserProvider = () => {
 
-  const [user, setUser] = useState( null )
-  const { toastMessage, showToastMessage } = useToastMessage()
+    const [user, setUser] = useState( null )
+
+    const { showToastMessage } = useToastMessage()
 
     const { mutate: loginUser, isLoading: loginLoading, error: loginError } = useMutation(
       formData => {
@@ -69,16 +70,17 @@ const useUserProvider = () => {
           }
         },
       }
-    );
+      );
+
 
   return {
-      loginUser,
-      loginLoading,
-      loginError,
-      logoutUser,
-      user,
-      createUser,
-      createUserLoading,
-      createUserError
+    loginUser,
+    loginLoading,
+    loginError,
+    logoutUser,
+    user,
+    createUser,
+    createUserLoading,
+    createUserError,
   };
 };

@@ -22,12 +22,17 @@ const ShoppingListPage = () => {
         setDialogOpen( true );
     }
 
+    const handleCloseDialog = () => {
+        setItemBeingEdited( null )
+        setDialogOpen(false)
+    }
+
     if (loadingItems) return <Loader size={76} />
 
     return (
         <>
             <Page>
-                {shoppingListItems?.pages?.[0].data?.data?.length ? (
+                {!shoppingListItems?.pages?.[0].data?.data?.length ? (
                     <Box className="empty-box">
                         <Typography variant="h4">Your shopping list is empty :(</Typography>
                         <Button variant="contained" color="secondary" onClick={handleOpenDialog}>Add your first item</Button>
@@ -38,11 +43,11 @@ const ShoppingListPage = () => {
                             <Typography variant="h4">Your Items</Typography>
                             <Button variant="contained" color="secondary" onClick={handleOpenDialog}>Add Item</Button>
                         </div>
-                        <ShoppingList listItems={shoppingListItems.pages} />
+                            <ShoppingList pages={shoppingListItems.pages} openDialog={handleOpenDialog}/>
                     </div>
                 )}
             </Page>
-            <ItemDialog open={dialogOpen} setOpen={setDialogOpen} item={itemBeingEdited} />
+            <ItemDialog open={dialogOpen} handleCloseDialog={handleCloseDialog} item={itemBeingEdited} />
         </>
     )
 }
@@ -95,7 +100,7 @@ const Page = styled.div`
 
   .list-container {
     width: 100%;
-    padding: 25px 10%;
+    padding: 5px 10%;
 
     .list-header {
       display: flex;

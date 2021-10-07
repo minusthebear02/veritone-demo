@@ -20,9 +20,9 @@ import { useForm, Controller } from 'react-hook-form';
 import { useItems } from '../context/ItemContext';
 
 
-const ItemDialog = ( { open, setOpen, item } ) => {
+const ItemDialog = ( { open, handleCloseDialog, item } ) => {
 
-  const { addItem, isAddingItem } = useItems()
+  const { addItem, isAddingItem, updateItem } = useItems()
 
   const {
     control,
@@ -33,17 +33,19 @@ const ItemDialog = ( { open, setOpen, item } ) => {
 
   const handleClose = () => {
       reset()
-      setOpen(false)
+      handleCloseDialog()
   }
 
   const onSubmit = async data => {
     console.log( 'data: ', data )
-    await addItem(data)
+    if ( !item ) {
+      await addItem(data)
+    } else {
+      await updateItem( { id: item.id, ...data })
+    }
     reset()
     handleClose()
   }
-
-  console.log('ite: ', item)
 
     return (
       <StyledDialog open={open} onClose={handleClose}>

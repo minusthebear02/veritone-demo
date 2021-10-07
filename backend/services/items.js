@@ -52,6 +52,20 @@ async function updateItem ( item ) {
     return {item: result[0]}
 }
 
+async function updatePurchased ( itemId, isPurchased ) {
+    if (!itemId) throw { code: 400, message: 'No item ID provided...'}
+
+    const result = await db.query(
+      `UPDATE items SET purchased = $1 WHERE id = $2 RETURNING *`,
+      [isPurchased, itemId],
+      (error, results) => {
+        if (error) throw error;
+      }
+    );
+
+    return {item: result[0]}
+}
+
 async function deleteItem ( itemId ) {
     if ( !itemId ) throw { code: 400, message: 'No Item ID provided...' }
 
@@ -68,5 +82,6 @@ module.exports = {
     getItemsByUser,
     createItem,
     updateItem,
-    deleteItem
+    deleteItem,
+    updatePurchased
 }

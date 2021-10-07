@@ -77,12 +77,28 @@ router.put( '/', itemValidate, async function ( req, res, next ) {
     }
 } )
 
-/* DELETE item */
-router.delete( '/', async function ( req, res, next ) {
+/* UPDATE item purchased*/
+router.put( '/purchased', async function ( req, res, next ) {
     try {
-        res.json( await items.deleteItem( req.body.id ))
+
+        const { itemId, isPurchased = false } = req.body;
+
+        res.json( await items.updatePurchased( itemId, isPurchased ) );
     } catch ( err ) {
         console.error(`Error while updating an item `, err.message);
+        res.status(err.code).send(err.message);
+
+        next(err);
+    }
+} )
+
+/* DELETE item */
+router.delete( '/:id', async function ( req, res, next ) {
+    try {
+        const id = parseInt(req.params.id)
+        res.json( await items.deleteItem( id))
+    } catch ( err ) {
+        console.error(`Error while deleting an item `, err.message);
         res.status(err.code).send(err.message);
 
         next(err);

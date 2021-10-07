@@ -69,7 +69,71 @@ const useItemProvider = () => {
         }
       },
     }
-  );
+    );
+
+    const { mutate: updateItem, isLoading: isUpdatingItem } = useMutation(
+        inputData => {
+        return axios.put(
+            'http://localhost:3000/items',
+            inputData
+        );
+        },
+        {
+        onSuccess: res => {
+            if (res) {
+                console.log( 'updatedItem result: ', res );
+                showToastMessage({
+                  type: 'success',
+                  message: 'Item updated!',
+                });
+            refetchItems();
+            } else {
+            throw new Error(
+                'There was an issue adding the item. Please try again.'
+            );
+            }
+        },
+        }
+    );
+
+    const {
+      mutate: updatePurchased,
+    } = useMutation(
+      inputData => {
+        return axios.put('http://localhost:3000/items/purchased', inputData);
+      },
+      {
+        onSuccess: res => {
+          if (res) {
+            console.log('updatedItem result: ', res);
+            refetchItems();
+
+          } else {
+            throw new Error(
+              'There was an issue adding the item. Please try again.'
+            );
+          }
+        },
+      }
+        );
+
+     const { mutate: deleteItem, isLoading: isDeletingItem } = useMutation(
+         id => {
+         return axios.delete(`http://localhost:3000/items/${id}`);
+       },
+       {
+         onSuccess: res => {
+           if (res) {
+             console.log('updatedItem result: ', res);
+             refetchItems();
+           } else {
+             throw new Error(
+               'There was an issue adding the item. Please try again.'
+             );
+           }
+         },
+       }
+     );
 
   return {
     shoppingListItems,
@@ -79,6 +143,11 @@ const useItemProvider = () => {
     fetchMoreItems,
     addItem,
     isAddingItem,
-    itemAddingError,
+      itemAddingError,
+      updatePurchased,
+      updateItem,
+      isUpdatingItem,
+      deleteItem,
+    isDeletingItem
   };
 };

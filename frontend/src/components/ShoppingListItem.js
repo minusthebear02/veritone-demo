@@ -32,7 +32,7 @@ const ShoppingListItem = ({ item, openDialog, openDeleteDialog, index }) => {
 
   return (
     <StyledBox
-      index={index % 20}
+      delay={index % 20}
       sx={{
         background: isPurchased ? '#D5DFE92B' : '#fff',
         borderColor: isPurchased ? 'transparent' : '#d5dfe9',
@@ -95,7 +95,7 @@ const StyledBox = styled(Box)`
   border-radius: 4px;
   opacity: 0;
   animation: ${FadeIn} 0.5s ease-out forwards;
-  animation-delay: ${props => props.index * 0.1}s;
+  animation-delay: ${props => props.delay * 0.1}s;
   transition: all 0.2s ease-out;
 
   .item-content {

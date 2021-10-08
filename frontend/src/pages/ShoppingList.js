@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import CircularProgress from "@mui/material/CircularProgress";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 
-import { useItems } from "../context/ItemContext";
-import ShoppingList from "../components/ShoppingList";
-import ItemDialog from "../components/ItemDialog";
+import { useItems } from '../context/ItemContext';
+import ShoppingList from '../components/ShoppingList';
+import ItemDialog from '../components/ItemDialog';
 
 const ShoppingListPage = () => {
   const { shoppingListItems, loadingItems } = useItems();

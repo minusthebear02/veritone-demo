@@ -1,13 +1,13 @@
-import React from "react";
-import styled from "styled-components";
-import Button from "@mui/material/Button";
-import LoadingButton from "@mui/lab/LoadingButton";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import Typography from "@mui/material/Typography";
-import DialogTitle from "@mui/material/DialogTitle";
-import { useItems } from "../context/ItemContext";
+import React from 'react';
+import styled from 'styled-components';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import Typography from '@mui/material/Typography';
+import DialogTitle from '@mui/material/DialogTitle';
+import { useItems } from '../context/ItemContext';
 
 const DeleteItemDialog = ({ open, handleCloseDialog, itemId }) => {
   const { deleteItem, isDeletingItem } = useItems();
@@ -16,9 +16,10 @@ const DeleteItemDialog = ({ open, handleCloseDialog, itemId }) => {
     handleCloseDialog();
   };
 
-  const handleDeleteItem = () => {
-    console.log("delete item: ", itemId);
-    deleteItem(itemId);
+  const handleDeleteItem = async () => {
+    console.log('delete item: ', itemId);
+    await deleteItem(itemId);
+    handleCloseDialog();
   };
 
   return (

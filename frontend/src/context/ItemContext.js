@@ -60,10 +60,23 @@ const useItemProvider = () => {
             message: 'Item added!',
           });
         } else {
+          showToastMessage({
+            type: 'error',
+            message: 'Error adding item, please try again.',
+          });
           throw new Error(
             'There was an issue adding the item. Please try again.'
           );
         }
+      },
+      onError: () => {
+        showToastMessage({
+          type: 'error',
+          message: 'Error adding item, please try again.',
+        });
+        throw new Error(
+          'There was an issue adding the item. Please try again.'
+        );
       },
     }
   );
@@ -81,10 +94,23 @@ const useItemProvider = () => {
           });
           refetchItems();
         } else {
+          showToastMessage({
+            type: 'error',
+            message: 'Error updating item, please try again.',
+          });
           throw new Error(
-            'There was an issue adding the item. Please try again.'
+            'There was an issue updating the item. Please try again.'
           );
         }
+      },
+      onError: () => {
+        showToastMessage({
+          type: 'error',
+          message: 'Error updating item, please try again.',
+        });
+        throw new Error(
+          'There was an issue updating the item. Please try again.'
+        );
       },
     }
   );
@@ -99,10 +125,23 @@ const useItemProvider = () => {
           if (res) {
             refetchItems();
           } else {
+            showToastMessage({
+              type: 'error',
+              message: 'Error updating item, please try again.',
+            });
             throw new Error(
-              'There was an issue adding the item. Please try again.'
+              'There was an issue updating the item. Please try again.'
             );
           }
+        },
+        onError: () => {
+          showToastMessage({
+            type: 'error',
+            message: 'Error updating item, please try again.',
+          });
+          throw new Error(
+            'There was an issue updating the item. Please try again.'
+          );
         },
       }
     );
@@ -120,10 +159,23 @@ const useItemProvider = () => {
             message: 'Item deleted!',
           });
         } else {
+          showToastMessage({
+            type: 'error',
+            message: 'Error deleting item, please try again.',
+          });
           throw new Error(
-            'There was an issue adding the item. Please try again.'
+            'There was an issue deleting the item. Please try again.'
           );
         }
+      },
+      onError: () => {
+        showToastMessage({
+          type: 'error',
+          message: 'Error deleting item, please try again.',
+        });
+        throw new Error(
+          'There was an issue deleting the item. Please try again.'
+        );
       },
     }
   );

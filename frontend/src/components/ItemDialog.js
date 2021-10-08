@@ -35,7 +35,6 @@ const ItemDialog = ({ open, handleCloseDialog, item }) => {
   };
 
   const onSubmit = async data => {
-    console.log('data: ', data);
     if (!item) {
       await addItem(data);
     } else {

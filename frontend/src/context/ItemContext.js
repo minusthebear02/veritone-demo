@@ -1,8 +1,8 @@
-import React, { useState, useContext, createContext } from "react";
-import axios from "axios";
-import { useMutation, useInfiniteQuery } from "react-query";
-import { useToastMessage } from "./ToastContext";
-import { useUser } from "./UserContext";
+import React, { useContext, createContext } from 'react';
+import axios from 'axios';
+import { useMutation, useInfiniteQuery } from 'react-query';
+import { useToastMessage } from './ToastContext';
+import { useUser } from './UserContext';
 
 const ItemContext = createContext();
 
@@ -27,7 +27,7 @@ const useItemProvider = () => {
     hasNextPage,
     refetch: refetchItems,
   } = useInfiniteQuery(
-    ["shoppingItems", user?.id],
+    ['shoppingItems', user?.id],
     async ({ pageParam = 1 }) => {
       const res = await axios.get(
         `http://localhost:3000/items?page=${pageParam}&userId=${user?.id}`
@@ -45,23 +45,23 @@ const useItemProvider = () => {
     isLoading: isAddingItem,
     error: itemAddingError,
   } = useMutation(
-    (formData) => {
-      return axios.post("http://localhost:3000/items", {
+    formData => {
+      return axios.post('http://localhost:3000/items', {
         ...formData,
         userId: user.id,
       });
     },
     {
-      onSuccess: (res) => {
+      onSuccess: res => {
         if (res) {
           refetchItems();
           showToastMessage({
-            type: "success",
-            message: "Item added!",
+            type: 'success',
+            message: 'Item added!',
           });
         } else {
           throw new Error(
-            "There was an issue adding the item. Please try again."
+            'There was an issue adding the item. Please try again.'
           );
         }
       },
@@ -69,54 +69,59 @@ const useItemProvider = () => {
   );
 
   const { mutate: updateItem, isLoading: isUpdatingItem } = useMutation(
-    (inputData) => {
-      return axios.put("http://localhost:3000/items", inputData);
+    inputData => {
+      return axios.put('http://localhost:3000/items', inputData);
     },
     {
-      onSuccess: (res) => {
+      onSuccess: res => {
         if (res) {
           showToastMessage({
-            type: "success",
-            message: "Item updated!",
+            type: 'success',
+            message: 'Item updated!',
           });
           refetchItems();
         } else {
           throw new Error(
-            "There was an issue adding the item. Please try again."
+            'There was an issue adding the item. Please try again.'
           );
         }
       },
     }
   );
 
-  const { mutate: updatePurchased } = useMutation(
-    (inputData) => {
-      return axios.put("http://localhost:3000/items/purchased", inputData);
-    },
-    {
-      onSuccess: (res) => {
-        if (res) {
-          refetchItems();
-        } else {
-          throw new Error(
-            "There was an issue adding the item. Please try again."
-          );
-        }
+  const { mutate: updatePurchased, isError: updatePurchasedError } =
+    useMutation(
+      (inputData, errorCallback) => {
+        return axios.put('http://localhost:3000/items/purchased', inputData);
       },
-    }
-  );
+      {
+        onSuccess: res => {
+          if (res) {
+            refetchItems();
+          } else {
+            throw new Error(
+              'There was an issue adding the item. Please try again.'
+            );
+          }
+        },
+      }
+    );
 
   const { mutate: deleteItem, isLoading: isDeletingItem } = useMutation(
-    (id) => {
+    id => {
       return axios.delete(`http://localhost:3000/items/${id}`);
     },
     {
-      onSuccess: (res) => {
+      onSuccess: res => {
         if (res) {
           refetchItems();
+          showToastMessage({
+            type: 'success',
+            message: 'Item deleted!',
+          });
         } else {
           throw new Error(
-            "There was an issue adding the item. Please try again."
+            'There was an issue adding the item. Please try again.'
           );
         }
       },
@@ -134,6 +139,7 @@ const useItemProvider = () => {
     isAddingItem,
     itemAddingError,
     updatePurchased,
+    updatePurchasedError,
     updateItem,
     isUpdatingItem,
     deleteItem,

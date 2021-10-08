@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import CircularProgress from "@mui/material/CircularProgress";
-import List from "@mui/material/List";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import CircularProgress from '@mui/material/CircularProgress';
+import List from '@mui/material/List';
 
-import ShoppingListItem from "./ShoppingListItem";
-import DeleteItemDialog from "./DeleteItemDialog";
-import { useItems } from "../context/ItemContext";
+import ShoppingListItem from './ShoppingListItem';
+import DeleteItemDialog from './DeleteItemDialog';
+import { useItems } from '../context/ItemContext';
 
 const ShoppingList = ({ pages, openDialog }) => {
   const [showDeleteDialog, toggleDeleteDialog] = useState(false);
@@ -25,11 +25,11 @@ const ShoppingList = ({ pages, openDialog }) => {
   };
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [hasNextPage]);
 
-  const handleOpenDeleteDialog = (itemId) => {
+  const handleOpenDeleteDialog = itemId => {
     setItemBeingDeleted(itemId);
     toggleDeleteDialog(true);
   };
@@ -39,16 +39,17 @@ const ShoppingList = ({ pages, openDialog }) => {
     toggleDeleteDialog(false);
   };
 
-  const renderItems = (pages) => {
+  const renderItems = pages => {
     const flattenedItems = pages.reduce((acc, currentPage) => {
       return [...acc, ...currentPage.data?.data];
     }, []);
 
     if (!flattenedItems.length) return null;
 
-    return flattenedItems.map((item) => (
+    return flattenedItems.map((item, index) => (
       <ShoppingListItem
         key={item.id}
+        index={index}
         item={item}
         openDialog={openDialog}
         openDeleteDialog={() => handleOpenDeleteDialog(item.id)}
@@ -60,7 +61,7 @@ const ShoppingList = ({ pages, openDialog }) => {
     <>
       <StyledList>{renderItems(pages)}</StyledList>
       {fetchingMoreItems && (
-        <div style={{ textAlign: "center", marginTop: 10 }}>
+        <div style={{ textAlign: 'center', marginTop: 10 }}>
           <CircularProgress />
         </div>
       )}

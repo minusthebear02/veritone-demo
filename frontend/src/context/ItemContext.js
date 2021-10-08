@@ -1,8 +1,8 @@
-import React, { useState, useContext, createContext } from 'react';
-import axios from 'axios';
-import { useMutation, useInfiniteQuery } from 'react-query';
-import { useToastMessage } from './ToastContext';
-import { useUser } from './UserContext'
+import React, { useState, useContext, createContext } from "react";
+import axios from "axios";
+import { useMutation, useInfiniteQuery } from "react-query";
+import { useToastMessage } from "./ToastContext";
+import { useUser } from "./UserContext";
 
 const ItemContext = createContext();
 
@@ -14,12 +14,9 @@ export const ItemProvider = ({ children }) => {
 export const useItems = () => useContext(ItemContext);
 
 const useItemProvider = () => {
+  const { showToastMessage } = useToastMessage();
 
-    const [nextPage, setNextPage] = useState(1);
-
-    const { showToastMessage } = useToastMessage();
-
-    const { user } = useUser()
+  const { user } = useUser();
 
   const {
     isLoading: loadingItems,
@@ -27,18 +24,19 @@ const useItemProvider = () => {
     error: itemsError,
     isFetchingNextPage: fetchingMoreItems,
     fetchNextPage: fetchMoreItems,
+    hasNextPage,
     refetch: refetchItems,
   } = useInfiniteQuery(
-    ['shoppingItems', user?.id],
+    ["shoppingItems", user?.id],
     async ({ pageParam = 1 }) => {
       const res = await axios.get(
         `http://localhost:3000/items?page=${pageParam}&userId=${user?.id}`
       );
-      setNextPage(res.data.meta.nextPage);
       return res;
     },
     {
-      getNextPageParam: () => nextPage,
+      getNextPageParam: (lastPage, pages) =>
+        lastPage.data.meta.nextPage || false,
     }
   );
 
@@ -47,93 +45,83 @@ const useItemProvider = () => {
     isLoading: isAddingItem,
     error: itemAddingError,
   } = useMutation(
-    formData => {
-      return axios.post('http://localhost:3000/items', {
+    (formData) => {
+      return axios.post("http://localhost:3000/items", {
         ...formData,
         userId: user.id,
       });
     },
     {
-      onSuccess: res => {
+      onSuccess: (res) => {
         if (res) {
-            console.log( 'adding item result: ', res );
-            refetchItems()
-            showToastMessage({
-                type: 'success',
-                message: 'Item added!',
-            });
+          refetchItems();
+          showToastMessage({
+            type: "success",
+            message: "Item added!",
+          });
         } else {
-            throw new Error(
-                'There was an issue adding the item. Please try again.'
-            );
+          throw new Error(
+            "There was an issue adding the item. Please try again."
+          );
         }
       },
     }
-    );
+  );
 
-    const { mutate: updateItem, isLoading: isUpdatingItem } = useMutation(
-        inputData => {
-        return axios.put(
-            'http://localhost:3000/items',
-            inputData
-        );
-        },
-        {
-        onSuccess: res => {
-            if (res) {
-                console.log( 'updatedItem result: ', res );
-                showToastMessage({
-                  type: 'success',
-                  message: 'Item updated!',
-                });
-            refetchItems();
-            } else {
-            throw new Error(
-                'There was an issue adding the item. Please try again.'
-            );
-            }
-        },
+  const { mutate: updateItem, isLoading: isUpdatingItem } = useMutation(
+    (inputData) => {
+      return axios.put("http://localhost:3000/items", inputData);
+    },
+    {
+      onSuccess: (res) => {
+        if (res) {
+          showToastMessage({
+            type: "success",
+            message: "Item updated!",
+          });
+          refetchItems();
+        } else {
+          throw new Error(
+            "There was an issue adding the item. Please try again."
+          );
         }
-    );
-
-    const {
-      mutate: updatePurchased,
-    } = useMutation(
-      inputData => {
-        return axios.put('http://localhost:3000/items/purchased', inputData);
       },
-      {
-        onSuccess: res => {
-          if (res) {
-            console.log('updatedItem result: ', res);
-            refetchItems();
+    }
+  );
 
-          } else {
-            throw new Error(
-              'There was an issue adding the item. Please try again.'
-            );
-          }
-        },
-      }
-        );
+  const { mutate: updatePurchased } = useMutation(
+    (inputData) => {
+      return axios.put("http://localhost:3000/items/purchased", inputData);
+    },
+    {
+      onSuccess: (res) => {
+        if (res) {
+          refetchItems();
+        } else {
+          throw new Error(
+            "There was an issue adding the item. Please try again."
+          );
+        }
+      },
+    }
+  );
 
-     const { mutate: deleteItem, isLoading: isDeletingItem } = useMutation(
-         id => {
-         return axios.delete(`http://localhost:3000/items/${id}`);
-       },
-       {
-         onSuccess: res => {
-           if (res) {
-             console.log('updatedItem result: ', res);
-             refetchItems();
-           } else {
-             throw new Error(
-               'There was an issue adding the item. Please try again.'
-             );
-           }
-         },
-       }
-     );
+  const { mutate: deleteItem, isLoading: isDeletingItem } = useMutation(
+    (id) => {
+      return axios.delete(`http://localhost:3000/items/${id}`);
+    },
+    {
+      onSuccess: (res) => {
+        if (res) {
+          refetchItems();
+        } else {
+          throw new Error(
+            "There was an issue adding the item. Please try again."
+          );
+        }
+      },
+    }
+  );
 
   return {
     shoppingListItems,
@@ -141,13 +129,14 @@ const useItemProvider = () => {
     itemsError,
     fetchingMoreItems,
     fetchMoreItems,
+    hasNextPage,
     addItem,
     isAddingItem,
-      itemAddingError,
-      updatePurchased,
-      updateItem,
-      isUpdatingItem,
-      deleteItem,
-    isDeletingItem
+    itemAddingError,
+    updatePurchased,
+    updateItem,
+    isUpdatingItem,
+    deleteItem,
+    isDeletingItem,
   };
 };

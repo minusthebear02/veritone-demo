@@ -1,76 +1,69 @@
-import React from 'react'
-import styled from 'styled-components'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import { useItems } from '../context/ItemContext';
+import React from "react";
+import styled from "styled-components";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Checkbox from "@mui/material/Checkbox";
+import IconButton from "@mui/material/IconButton";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import { useItems } from "../context/ItemContext";
+import { decodeHtml } from "../utils/decodeHtml";
 
+const ShoppingListItem = ({ item, openDialog, openDeleteDialog }) => {
+  const { updatePurchased } = useItems();
 
-const ShoppingListItem = ( { item, openDialog, openDeleteDialog } ) => {
+  const handlePurchase = (e) => {
+    updatePurchased({ itemId: item.id, isPurchased: e.target.checked });
+  };
 
-    const { updatePurchased } = useItems()
+  const handleOpenDialog = () => {
+    openDialog("", item);
+  };
 
-    const handlePurchase = e => {
-        updatePurchased( { itemId: item.id, isPurchased: e.target.checked })
-    }
+  const { name, description, quantity, purchased } = item;
 
-    const handleOpenDialog = () => {
-        openDialog('', item)
-    }
+  return (
+    <StyledBox
+      sx={{
+        background: purchased ? "#D5DFE92B" : "#fff",
+        borderColor: purchased ? "transparent" : "#d5dfe9",
+      }}
+    >
+      <div className="checkbox">
+        <Checkbox defaultChecked={item?.purchased} onChange={handlePurchase} />
+      </div>
+      <div className="item-content">
+        <Typography
+          variant="h5"
+          color={purchased ? "primary" : null}
+          sx={{ textDecoration: purchased ? "line-through" : "none" }}
+        >
+          {name}
+          <span variant="body2" className="quantity">
+            (qty: {quantity})
+          </span>
+        </Typography>
 
-    const { name, description, quantity, purchased } = item;
+        <Typography
+          variant="body1"
+          sx={{ textDecoration: purchased ? "line-through" : "none" }}
+        >
+          {decodeHtml(description)}
+        </Typography>
+      </div>
+      <div className="action-buttons">
+        <IconButton onClick={handleOpenDialog}>
+          <EditOutlinedIcon />
+        </IconButton>
+        <IconButton onClick={openDeleteDialog}>
+          <DeleteOutlinedIcon />
+        </IconButton>
+      </div>
+    </StyledBox>
+  );
+};
 
-    return (
-      <StyledBox
-        sx={{
-          background: purchased ? '#D5DFE92B' : '#fff',
-          borderColor: purchased ? 'transparent' : '#d5dfe9',
-        }}
-      >
-        <div className="checkbox">
-          <Checkbox
-            defaultChecked={item?.purchased}
-            onChange={handlePurchase}
-          />
-        </div>
-        <div className="item-content">
-          <Typography
-            variant="h5"
-            color={purchased ? 'primary' : null}
-            sx={{ textDecoration: purchased ? 'line-through' : 'none' }}
-          >
-            {name}
-            <span
-              variant="body2"
-              className="quantity"
-            >
-              (qty: {quantity})
-            </span>
-          </Typography>
-
-          <Typography
-            variant="body1"
-            sx={{ textDecoration: purchased ? 'line-through' : 'none' }}
-          >
-            {description}
-          </Typography>
-        </div>
-        <div className="action-buttons">
-          <IconButton onClick={handleOpenDialog}>
-            <EditOutlinedIcon />
-          </IconButton>
-          <IconButton onClick={openDeleteDialog}>
-            <DeleteOutlinedIcon />
-          </IconButton>
-        </div>
-      </StyledBox>
-    );
-}
-
-export default ShoppingListItem
+export default ShoppingListItem;
 
 const StyledBox = styled(Box)`
   display: flex;
@@ -82,26 +75,28 @@ const StyledBox = styled(Box)`
   transition: all 0.2s ease-out;
 
   .item-content {
-      flex: 1;
-      padding: 0 20px;
+    flex: 1;
+    padding: 0 20px;
 
-      h5 {
-          font-size: 16px;
-          font-weight: 600;
-          transition: all 0.2s ease-out;
-        }
+    h5 {
+      font-size: 16px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s ease-out;
+    }
 
-        .quantity {
-            font-size: 0.7em;
-            opacity: 0.5;
-            margin-left: 7px;
-        }
+    .quantity {
+      font-size: 0.7em;
+      opacity: 0.5;
+      margin-left: 7px;
+    }
 
-        p {
-            font-size: 14px;
-            color: #7d7a7a;
-            font-weight: 600;
-            transition: all 0.2s ease-out;
+    p {
+      font-size: 14px;
+      color: #7d7a7a;
+      font-weight: 600;
+      transition: all 0.2s ease-out;
     }
   }
 `;

@@ -1,4 +1,4 @@
-import React, { useState, useContext, createContext } from 'react';
+import React, { useState, useContext, createContext } from "react";
 
 const ToastMessageContext = createContext();
 
@@ -16,7 +16,7 @@ export const useToastMessage = () => useContext(ToastMessageContext);
 const useToastMessageProvider = () => {
   const [toastMessage, setToastMessage] = useState({ show: false });
 
-  const showToastMessage = toast => {
+  const showToastMessage = (toast) => {
     setToastMessage({
       show: true,
       ...toast,

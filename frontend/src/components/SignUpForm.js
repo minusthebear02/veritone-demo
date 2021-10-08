@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { useForm, Controller } from 'react-hook-form';
-import { useHistory } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { useForm, Controller } from "react-hook-form";
+import { useHistory } from "react-router-dom";
 
-import TextField from '@mui/material/TextField';
-import LoadingButton from '@mui/lab/LoadingButton';
-import { Typography } from '@mui/material';
-import { useUser } from '../context/UserContext';
+import TextField from "@mui/material/TextField";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { Typography } from "@mui/material";
+import { useUser } from "../context/UserContext";
 
 const SignUpForm = () => {
   const history = useHistory();
@@ -17,9 +17,9 @@ const SignUpForm = () => {
 
   useEffect(() => {
     if (user?.id) {
-      history.push('/');
+      history.push("/");
     }
-  }, [user?.id]);
+  }, [user?.id, history]);
 
   useEffect(() => {
     setDisplayError(!!createUserError?.message);
@@ -43,7 +43,7 @@ const SignUpForm = () => {
             label="Full Name"
             type="text"
             error={errors.name}
-            helperText={errors.name && 'A name is required'}
+            helperText={errors.name && "A name is required"}
             {...field}
           />
         )}
@@ -58,7 +58,7 @@ const SignUpForm = () => {
             label="Email"
             type="email"
             error={errors.email}
-            helperText={errors.email && 'A valid email address is required'}
+            helperText={errors.email && "A valid email address is required"}
             {...field}
           />
         )}
@@ -75,7 +75,7 @@ const SignUpForm = () => {
             error={errors.password}
             helperText={
               errors.password
-                ? 'A password is required'
+                ? "A password is required"
                 : "PASSWORDS ARE STORED IN PLAIN TEXT, DO NOT USE A MEANINGFUL PASSWORD"
             }
             {...field}

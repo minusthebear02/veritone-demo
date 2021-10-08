@@ -1,65 +1,83 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
-import CircularProgress from '@mui/material/CircularProgress'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button';
+import React, { useState } from "react";
+import styled from "styled-components";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 
-import { useItems } from '../context/ItemContext'
-import ShoppingList from '../components/ShoppingList'
-import ItemDialog from '../components/ItemDialog'
+import { useItems } from "../context/ItemContext";
+import ShoppingList from "../components/ShoppingList";
+import ItemDialog from "../components/ItemDialog";
 
 const ShoppingListPage = () => {
+  const { shoppingListItems, loadingItems } = useItems();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [itemBeingEdited, setItemBeingEdited] = useState(null);
 
-    const { shoppingListItems, loadingItems } = useItems()
-    const [ dialogOpen, setDialogOpen ] = useState( false )
-    const [ itemBeingEdited, setItemBeingEdited ] = useState(null)
-
-    const handleOpenDialog = (e, item) => {
-        if ( item ) {
-            setItemBeingEdited( item )
-        }
-        setDialogOpen( true );
+  const handleOpenDialog = (e, item) => {
+    if (item) {
+      setItemBeingEdited(item);
     }
+    setDialogOpen(true);
+  };
 
-    const handleCloseDialog = () => {
-        setItemBeingEdited( null )
-        setDialogOpen(false)
-    }
+  const handleCloseDialog = () => {
+    setItemBeingEdited(null);
+    setDialogOpen(false);
+  };
 
-    if (loadingItems) return <Loader size={76} />
+  if (loadingItems) return <Loader size={76} />;
 
-    return (
-        <>
-            <Page>
-                {!shoppingListItems?.pages?.[0].data?.data?.length ? (
-                    <Box className="empty-box">
-                        <Typography variant="h4">Your shopping list is empty :(</Typography>
-                        <Button variant="contained" color="secondary" onClick={handleOpenDialog}>Add your first item</Button>
-                    </Box>
-                ) : (
-                    <div className="list-container">
-                        <div className="list-header">
-                            <Typography variant="h4">Your Items</Typography>
-                            <Button variant="contained" color="secondary" onClick={handleOpenDialog}>Add Item</Button>
-                        </div>
-                            <ShoppingList pages={shoppingListItems.pages} openDialog={handleOpenDialog}/>
-                    </div>
-                )}
-            </Page>
-            <ItemDialog open={dialogOpen} handleCloseDialog={handleCloseDialog} item={itemBeingEdited} />
-        </>
-    )
-}
+  return (
+    <>
+      <Page>
+        {!shoppingListItems?.pages?.[0].data?.data?.length ? (
+          <Box className="empty-box">
+            <Typography variant="h4">Your shopping list is empty :(</Typography>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleOpenDialog}
+            >
+              Add your first item
+            </Button>
+          </Box>
+        ) : (
+          <div className="list-container">
+            <div className="list-header">
+              <Typography variant="h4">Your Items</Typography>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleOpenDialog}
+              >
+                Add Item
+              </Button>
+            </div>
+            <ShoppingList
+              pages={shoppingListItems.pages}
+              openDialog={handleOpenDialog}
+            />
+          </div>
+        )}
+      </Page>
+      <ItemDialog
+        open={dialogOpen}
+        handleCloseDialog={handleCloseDialog}
+        item={itemBeingEdited}
+      />
+    </>
+  );
+};
 
-export default ShoppingListPage
+export default ShoppingListPage;
 
-const Loader = styled( CircularProgress )`
-    position: absolute;
-    top: 188px;
-    left: 50%;
-    transform: translateX(-50%);
-`
+const Loader = styled(CircularProgress)`
+  position: absolute;
+  top: 188px;
+  left: 50%;
+  transform: translateX(-50%);
+`;
 
 const Page = styled.div`
   min-height: 100vh;
@@ -106,6 +124,11 @@ const Page = styled.div`
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background: #fff;
+      z-index: 2;
+      position: sticky;
+      top: 63px;
+      padding: 10px 0;
     }
   }
 `;
